@@ -1,27 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
 import MainLayout from './layouts/MainLayout'
-
-function Home() {
-  return (
-    <div className="container py-5">
-      <h1>Everyone Needs To Smile</h1>
-
-      <p className="lead">
-        Plataforma de peticiones ciudadanas
-        con análisis y medición de impacto.
-      </p>
-    </div>
-  )
-}
-
-function Login() {
-  return <h1>Login</h1>
-}
-
-function Registro() {
-  return <h1>Registro</h1>
-}
-
+import ProtectedRoute from './routes/ProtectedRoute'
+import RoleRoute from './routes/RoleRoute'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import Dashboard from './pages/Dashboard'
+import CreatePetition from './pages/CreatePetition'
+import PetitionDetail from './pages/PetitionDetail'
+import AdminPetitions from './pages/AdminPetitions'
 function App() {
   return (
     <BrowserRouter>
@@ -29,7 +17,33 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/registro" element={<Registro />} />
+          <Route path="/registro" element={<Register />} />
+
+          <Route
+            path="/peticiones/:id"
+            element={<PetitionDetail />}
+          />
+
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
+            />
+
+            <Route
+              path="/peticiones/nueva"
+              element={<CreatePetition />}
+            />
+          </Route>
+
+          <Route
+            path="/admin/peticiones"
+            element={
+              <RoleRoute allowedRoles={['admin']}>
+                <AdminPetitions />
+              </RoleRoute>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
